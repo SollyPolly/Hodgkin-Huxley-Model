@@ -1,0 +1,53 @@
+{
+    "model_params": {
+        "g_L": 0.3,
+        "g_K_bar": 36.0,
+        "g_Na_bar": 120.0,
+        "C_m": 1.0,
+        "E_L": -54.387,
+        "E_K": -77.0,
+        "E_Na": 50.0
+    },
+    "simulation_settings": {
+        "t_span": [0, 60],
+        "num_points": 1000,
+        "start_time": 20,
+        "pulse_amplitude": 10,
+        "pulse_duration": 5
+    },
+    "initial_conditions": {
+        "V0": -65.0,
+        "n0": 0.317,
+        "m0": 0.052,
+        "h0": 0.596
+    },
+    "m_gate_params": {
+        "alpha_m": 0.1,
+        "beta_m": 4.0,
+        "V_am": -36,
+        "V_bm": -60,
+        "K_am": 10,
+        "K_bm": 18 
+    },
+    "h_gate_params": {
+        "alpha_h": 0.07,
+        "beta_h": 1.0,
+        "V_ah": -60,
+        "V_bh": -30,
+        "K_ah": 20,
+        "K_bh": 10
+    },
+    "n_gate_params": {
+        "alpha_n": 0.01,
+        "beta_n": 0.125,
+        "V_an": -50,
+        "V_bn": -60,
+        "K_an": 10,
+        "K_bn": 80
+    },
+    "pulse_params": {
+        "start_time": 20,
+        "pulse_amplitude": 10,
+        "pulse_duration": 5
+    }
+}
