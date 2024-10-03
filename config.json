@@ -9,7 +9,7 @@
         "E_Na": 50.0
     },
     "simulation_settings": {
-        "t_span": [0, 60],
+        "t_span": [0, 200],
         "num_points": 1000,
         "start_time": 20,
         "pulse_amplitude": 10,
@@ -48,6 +48,6 @@
     "pulse_params": {
         "start_time": 20,
         "pulse_amplitude": 10,
-        "pulse_duration": 5
+        "pulse_duration": null
     }
 }
