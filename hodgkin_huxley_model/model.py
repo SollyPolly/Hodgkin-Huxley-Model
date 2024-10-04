@@ -3,13 +3,15 @@ from hodgkin_huxley_model.config import (
     g_L, g_K_bar, g_Na_bar, C_m, E_L, E_K, E_Na,
     m_gate_params, h_gate_params, n_gate_params
 )
+from hodgkin_huxley_model.temperature_scaling import apply_temperature_scaling
+
 def calculate_gate_variables(V):
-    A_m = m_gate_params['alpha_m'] * (V - m_gate_params['V_am']) / (1 - np.exp(-(V - m_gate_params['V_am']) / m_gate_params['K_am']))
-    B_m = m_gate_params['beta_m'] * np.exp(-(V - m_gate_params['V_bm']) / m_gate_params['K_bm'])
-    A_h = h_gate_params['alpha_h'] * np.exp(-(V - h_gate_params['V_ah']) / h_gate_params['K_ah'])
-    B_h = h_gate_params['beta_h'] / (1 + np.exp(-(V - h_gate_params['V_bh']) / h_gate_params['K_bh']))
-    A_n = n_gate_params['alpha_n'] * (V - n_gate_params['V_an']) / (1 - np.exp(-(V - n_gate_params['V_an']) / n_gate_params['K_an']))
-    B_n = n_gate_params['beta_n'] * np.exp(-(V - n_gate_params['V_bn']) / n_gate_params['K_bn'])
+    A_m = apply_temperature_scaling(m_gate_params['alpha_m'] * (V - m_gate_params['V_am']) / (1 - np.exp(-(V - m_gate_params['V_am']) / m_gate_params['K_am'])))
+    B_m = apply_temperature_scaling(m_gate_params['beta_m'] * np.exp(-(V - m_gate_params['V_bm']) / m_gate_params['K_bm']))
+    A_h = apply_temperature_scaling(h_gate_params['alpha_h'] * np.exp(-(V - h_gate_params['V_ah']) / h_gate_params['K_ah']))
+    B_h = apply_temperature_scaling(h_gate_params['beta_h'] / (1 + np.exp(-(V - h_gate_params['V_bh']) / h_gate_params['K_bh'])))
+    A_n = apply_temperature_scaling(n_gate_params['alpha_n'] * (V - n_gate_params['V_an']) / (1 - np.exp(-(V - n_gate_params['V_an']) / n_gate_params['K_an'])))
+    B_n = apply_temperature_scaling(n_gate_params['beta_n'] * np.exp(-(V - n_gate_params['V_bn']) / n_gate_params['K_bn']))
     return A_m, B_m, A_h, B_h, A_n, B_n
 
 def calculate_steady_states(A, B):

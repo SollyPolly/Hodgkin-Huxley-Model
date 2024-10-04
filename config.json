@@ -49,5 +49,10 @@
         "start_time": 20,
         "pulse_amplitude": 10,
         "pulse_duration": null
-    }
+    },
+        "temperature_params": {
+          "base_temperature": 6.3,   
+          "Q10": 3.0,
+          "simulation_temperature": 6.3
+        }
 }
