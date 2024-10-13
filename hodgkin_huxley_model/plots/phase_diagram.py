@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
-from ..config import pulse_params
-from ..model import compute_derivatives
+from ..config import simulation_settings
+from ..model import compute_derivatives, step_current
 
 def plot_phase_diagram(sol, gating_var_name):
     t = sol.t
@@ -10,7 +10,7 @@ def plot_phase_diagram(sol, gating_var_name):
     gating_var_values = np.linspace(0, 1, 20)
     V_grid, gating_var_grid = np.meshgrid(V_values, gating_var_values)
 
-    I = step_current(t, start=pulse_params['start_time'], amplitude=pulse_params['pulse_amplitude'], pulse_duration=pulse_params['pulse_duration'])
+    I = step_current(t)
     dV_grid = np.zeros_like(V_grid)
     dgating_var_grid = np.zeros_like(gating_var_grid)
 
@@ -36,7 +36,17 @@ def plot_phase_diagram(sol, gating_var_name):
     V_values = sol.y[0]
     gating_var_values = sol.y[['n', 'm', 'h'].index(gating_var_name) + 1]
 
+    # Plot the zero-crossing lines without labels
+    dV_contour = plt.contour(V_grid, gating_var_grid, dV_grid, levels=[0], colors='green', linestyles='dashed', linewidths=1)
+    dm_contour = plt.contour(V_grid, gating_var_grid, dgating_var_grid, levels=[0], colors='green', linestyles='dashed', linewidths=2)
+
+
+    # Plot the system trajectory
     plt.plot(V_values, gating_var_values, color='blue', label='Trajectory')
+
+    # Add labels to the legend manually
+    plt.plot([], [], color='green', linestyle='dashed', label='dV = 0')
+    plt.plot([], [], color='green', linestyle='dashed', label='dm = 0')
 
     plt.xlabel('Membrane Potential V (mV)')
     plt.ylabel(f'Gating Variable {gating_var_name}')
@@ -45,8 +55,10 @@ def plot_phase_diagram(sol, gating_var_name):
     plt.grid(True)
     plt.show()
 
-def step_current(t, start, amplitude, pulse_duration):
-    if pulse_duration is None:
-        return np.where(t >= start, amplitude, 0)
-    else:
-        return np.where((t >= start) & (t < start + pulse_duration), amplitude, 0)
+if __name__ == "__main__":
+    # Import necessary functions to run a simulation
+    from ..simulation import run_simulation
+    
+    # Run a simulation to get the solution
+    hh_sol, _ = run_simulation()
+    

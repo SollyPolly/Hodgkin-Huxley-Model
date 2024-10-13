@@ -2,16 +2,19 @@ import matplotlib.pyplot as plt
 import numpy as np
 from ..model import simple_calculate_derivatives, step_current
 from ..functions import find_intersections
+from scipy.interpolate import interp1d
 
-def plot_phase_fixed_diagram(sol):
+def plot_phase_fixed_zoomed(sol):
     t = sol.t
 
-    V_values = np.linspace(-100, 60, 25)
-    m_values = np.linspace(0, 1.2, 25)
+    # Form a 2D grid of V and m values
+    V_values = np.linspace(-100, 60, 100)
+    m_values = np.linspace(0, 1.2, 100)
     V_grid, m_grid = np.meshgrid(V_values, m_values)
 
     I = step_current(t[0])
 
+    # Calculate the derivatives at each point in the grid
     dV_grid = np.zeros_like(V_grid)
     dm_grid = np.zeros_like(m_grid)
 
@@ -23,6 +26,7 @@ def plot_phase_fixed_diagram(sol):
             dV_grid[i, j] = dV
             dm_grid[i, j] = dm
 
+    # Normalize the vectors
     magnitude = np.sqrt(dV_grid**2 + dm_grid**2)
     magnitude[magnitude == 0] = 1e-10
 
@@ -32,8 +36,9 @@ def plot_phase_fixed_diagram(sol):
     # Plot the slope field using quiver
     plt.figure(figsize=(8, 6))
     q = plt.quiver(V_grid, m_grid, dV_grid_norm, dm_grid_norm,
-                   magnitude, cmap='plasma', pivot='mid')
+                   magnitude, cmap='plasma', pivot='mid', scale=50)
     
+    # Get values for the trajectory
     V_values = sol.y[0]
     m_values = sol.y[1]
 
@@ -53,16 +58,19 @@ def plot_phase_fixed_diagram(sol):
             xi = np.append(xi, xinter)
             yi = np.append(yi, yinter)
 
-     # Plot the intersection points
+    # Plot the intersection points
     plt.scatter(xi, yi, color='purple', s=50, zorder=5, label='Intersection Points')
-
+    
     # Add labels to the legend manually
     plt.plot([], [], color='green', linestyle='dashed', label='dV = 0')
     plt.plot([], [], color='green', linestyle='dashed', label='dm = 0')
   
+    plt.xlim(-70, -50)  # Set x-axis limits
+    plt.ylim(0.0, 0.15)   # Set y-axis limits
+    
     plt.xlabel('Membrane Potential V (mV)')
     plt.ylabel('Gating Variable m')
-    plt.title('Phase Diagram with Slope Field for V and m (Simple Model)')
+    plt.title(f'Phase Diagram with Slope Field for V and m (Simple Model)')
     plt.legend()
     plt.grid(True)
     plt.show()

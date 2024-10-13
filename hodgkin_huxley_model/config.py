@@ -29,5 +29,4 @@ num_points = simulation_settings['num_points']
 # Initial conditions
 initial_conditions = config['initial_conditions']
 
-# Pulse parameters
-pulse_params = config['pulse_params']
+

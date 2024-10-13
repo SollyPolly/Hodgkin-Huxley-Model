@@ -3,7 +3,8 @@ from hodgkin_huxley_model.config import (
     g_L, g_K_bar, g_Na_bar, C_m, E_L, E_K, E_Na,
     m_gate_params, h_gate_params, n_gate_params
 )
-from hodgkin_huxley_model.temperature_scaling import apply_temperature_scaling
+from .functions import apply_temperature_scaling
+from .config import initial_conditions, simulation_settings
 
 def calculate_gate_variables(V):
     A_m = apply_temperature_scaling(m_gate_params['alpha_m'] * (V - m_gate_params['V_am']) / (1 - np.exp(-(V - m_gate_params['V_am']) / m_gate_params['K_am'])))
@@ -68,6 +69,26 @@ def hodgkin_huxley(t, y, I):
 
     return [dV, dn, dm, dh]
 
+def simple_hodgkin_huxley(t, y, I, V0):
+    V, m, = y
+    V = np.clip(V, -100, 100)
+
+    A_m, B_m, _, _, _, _ = calculate_gate_variables(V)
+    
+    m_inf_val = m_inf(V)
+    h = h_inf(V0)
+    n = n_inf(V0)
+
+    tau_m_val = calculate_time_constants(A_m, B_m)
+
+    dm_simple = (m_inf_val - m) / tau_m_val
+
+    dV_simple = (I - (g_Na_bar * (m ** 3) * h * (V - E_Na) +
+                g_K_bar * (n ** 4) * (V - E_K) +
+                g_L * (V - E_L))) / C_m
+
+    return [dV_simple, dm_simple]
+
 def compute_derivatives(V, gating_var, gating_var_name, I_ext, n=None, h=None):
     V = np.clip(V, -100, 100)
 
@@ -110,3 +131,33 @@ def compute_derivatives(V, gating_var, gating_var_name, I_ext, n=None, h=None):
         return dV, dm
     elif gating_var_name == 'h':
         return dV, dh
+
+def simple_calculate_derivatives(V, m, I_ext):
+    _, _, _, _, _, _ = calculate_gate_variables(V)
+    
+    V0 = initial_conditions['V0']
+
+    m_inf_val = m_inf(V)
+    tau_m_val = tau_m(V)
+
+    h = h_inf(V0)
+    n = n_inf(V0)
+
+    dm_simple = (m_inf_val - m) / tau_m_val
+    dV_simple = (I_ext - (g_Na_bar * (m ** 3) * h * (V - E_Na) +
+                g_K_bar * (n ** 4) * (V - E_K) +
+                g_L * (V - E_L))) / C_m
+
+    return dV_simple, dm_simple
+
+def step_current(t):
+    
+    start = simulation_settings['start_time']
+    amplitude = simulation_settings['pulse_amplitude']
+    pulse_duration = simulation_settings['pulse_duration']
+    
+    if pulse_duration is None:
+        return np.where(t >= start, amplitude, 0)
+    else:
+        return np.where((t >= start) & (t < start + pulse_duration), amplitude, 0)
+    

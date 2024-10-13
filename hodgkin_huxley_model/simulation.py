@@ -1,15 +1,9 @@
 import numpy as np
 from scipy.integrate import solve_ivp
-from .model import hodgkin_huxley
-from .config import t_span, num_points, initial_conditions, pulse_params
+from .model import hodgkin_huxley, simple_hodgkin_huxley, step_current
+from .config import t_span, num_points, initial_conditions
 
-def step_current(t, start=pulse_params['start_time'], amplitude=pulse_params['pulse_amplitude'], pulse_duration=pulse_params['pulse_duration']):
-    if pulse_duration is None:
-        return np.where(t >= start, amplitude, 0)
-    else:
-        return np.where((t >= start) & (t < start + pulse_duration), amplitude, 0)
-
-def run_simulation():
+def run_hh_simulation():
     t_eval = np.linspace(t_span[0], t_span[1], num_points)
     y0 = [
         initial_conditions['V0'],
@@ -23,3 +17,24 @@ def run_simulation():
 
     sol = solve_ivp(ode_wrapper, t_span, y0, t_eval=t_eval)
     return sol
+
+def run_simple_hh_simulation():
+    t_eval = np.linspace(t_span[0], t_span[1], num_points)
+    y0 = [
+        initial_conditions['V0'],
+        initial_conditions['m0']
+    ]
+
+    def ode_wrapper(t, y):
+        return simple_hodgkin_huxley(t, y, step_current(t), initial_conditions['V0'])
+
+    sol = solve_ivp(ode_wrapper, t_span, y0, t_eval=t_eval)
+    return sol
+
+def run_both_simulations():
+    hh_sol = run_hh_simulation()
+    simple_hh_sol = run_simple_hh_simulation()
+    return hh_sol, simple_hh_sol
+
+def run_simulation():
+    return run_both_simulations()
