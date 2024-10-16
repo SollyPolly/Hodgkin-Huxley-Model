@@ -1,9 +1,10 @@
 import matplotlib.pyplot as plt
 import numpy as np
-from ..model import simple_calculate_derivatives, step_current
-from ..functions import find_intersections
+from ...model import V_m_calculate_derivatives
+from ...functions import find_intersections, step_current
 
-def plot_phase_fixed_diagram(sol):
+def plot_phase_fixed_V_M(sol):
+
     t = sol.t
 
     V_values = np.linspace(-100, 60, 25)
@@ -19,7 +20,7 @@ def plot_phase_fixed_diagram(sol):
         for j in range(V_grid.shape[1]):
             V = V_grid[i, j]
             m = m_grid[i, j]
-            dV, dm = simple_calculate_derivatives(V, m, I)
+            dV, dm = V_m_calculate_derivatives(V, m, I)
             dV_grid[i, j] = dV
             dm_grid[i, j] = dm
 
@@ -62,16 +63,16 @@ def plot_phase_fixed_diagram(sol):
   
     plt.xlabel('Membrane Potential V (mV)')
     plt.ylabel('Gating Variable m')
-    plt.title('Phase Diagram with Slope Field for V and m (Simple Model)')
+    plt.title('Phase Diagram with Slope Field for V and m (V_M)')
     plt.legend()
     plt.grid(True)
     plt.show()
 
 if __name__ == "__main__":
     # Import necessary functions to run a simulation
-    from ..simulation import run_simulation
+    from ...simulation import run_simulation
     
     # Run a simulation to get the solution
-    _, simple_hh_sol = run_simulation()
+    _, V_M_hh_sol, _, _ = run_simulation()
     
 

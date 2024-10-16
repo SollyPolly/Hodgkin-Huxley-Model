@@ -1,5 +1,5 @@
 import matplotlib.pyplot as plt
-from ..config import g_Na_bar, g_K_bar, g_L, E_Na, E_K, E_L
+from ...config import g_Na_bar, g_K_bar, g_L, E_Na, E_K, E_L
 
 def plot_membrane_currents(sol):
     # Calculate the currents

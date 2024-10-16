@@ -1,5 +1,5 @@
 import matplotlib.pyplot as plt
-from ..config import g_Na_bar, g_K_bar
+from ...config import g_Na_bar, g_K_bar
 
 def plot_g_na_vs_time(sol):
     time_values = sol.t

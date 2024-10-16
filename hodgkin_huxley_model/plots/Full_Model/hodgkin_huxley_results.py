@@ -1,5 +1,5 @@
 import matplotlib.pyplot as plt
-from ..model import step_current
+from ...functions import step_current
 
 def plot_hodgkin_huxley_results(sol):
     plt.figure(figsize=(12, 6))

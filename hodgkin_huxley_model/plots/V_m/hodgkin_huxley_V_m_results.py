@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
-from ..model import step_current
+from ...functions import step_current
 
-def plot_simple_hodgkin_huxley_results(sol):
+def plot_V_M_hodgkin_huxley_results(sol):
     plt.figure(figsize=(12, 6))
 
     # Plot the membrane potential
@@ -9,7 +9,7 @@ def plot_simple_hodgkin_huxley_results(sol):
     plt.plot(sol.t, sol.y[0], label='Membrane Potential (V)')
     plt.axhline(0, color='grey', lw=0.5, ls='--')
     plt.ylabel('Voltage (mV)')
-    plt.title('Simple Hodgkin-Huxley Neuron Model')
+    plt.title('V_M Hodgkin-Huxley Neuron Model')
     plt.legend()
 
     # Plot the gating variable
@@ -29,6 +29,6 @@ def plot_simple_hodgkin_huxley_results(sol):
     plt.show()
 
 if __name__ == "__main__":
-    from ..simulation import run_simulation
+    from ...simulation import run_simulation
     
-    _, simple_hh_sol = run_simulation()
+    _, V_M_hh_sol, _, _ = run_simulation()

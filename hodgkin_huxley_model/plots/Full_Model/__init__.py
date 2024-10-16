@@ -4,6 +4,3 @@ from .conductance_vs_time import plot_g_na_vs_time
 from .membrane_currents import plot_membrane_currents
 from .time_constant_comparison import plot_time_constant_comparison
 from .phase_diagram import plot_phase_diagram
-from .phase_diagram_fixed_gating import plot_phase_fixed_diagram
-from .phase_diagram_fixed_zoomed import plot_phase_fixed_zoomed
-from .hodgkin_huxley_simple_results import plot_simple_hodgkin_huxley_results

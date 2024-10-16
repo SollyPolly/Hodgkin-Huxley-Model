@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
-from ..config import simulation_settings
-from ..model import compute_derivatives, step_current
+from ...config import simulation_settings
+from ...functions import step_current, compute_derivatives
 
 def plot_phase_diagram(sol, gating_var_name):
     t = sol.t
@@ -57,8 +57,8 @@ def plot_phase_diagram(sol, gating_var_name):
 
 if __name__ == "__main__":
     # Import necessary functions to run a simulation
-    from ..simulation import run_simulation
+    from ...simulation import run_simulation
     
     # Run a simulation to get the solution
-    hh_sol, _ = run_simulation()
+    hh_sol, _, _, _ = run_simulation()
     

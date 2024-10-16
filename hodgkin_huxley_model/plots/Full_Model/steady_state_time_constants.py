@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from ..model import m_inf, h_inf, n_inf, tau_m, tau_h, tau_n
+from ...model import m_inf, h_inf, n_inf, tau_m, tau_h, tau_n
 
 def plot_steady_state_and_time_constants_dual_axis():
     V_values = np.linspace(-80, 70, 500)

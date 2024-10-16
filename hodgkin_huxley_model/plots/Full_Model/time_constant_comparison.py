@@ -1,5 +1,5 @@
 import matplotlib.pyplot as plt
-from ..model import m_inf
+from ...model import m_inf
 
 def plot_time_constant_comparison(sol):
     time_values = sol.t
